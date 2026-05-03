@@ -1,16 +1,63 @@
-# React + Vite
+# 🌤️ Weather App — version simple
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Structure du projet
 
-Currently, two official plugins are available:
+```
+src/
+├── main.jsx                 ← démarre React (ne pas toucher)
+├── App.jsx                  ← LE CERVEAU : état, API, logique
+├── App.css
+├── index.css                ← styles globaux
+└── components/
+    ├── SearchBar.jsx        ← champ de recherche
+    ├── SearchBar.css
+    ├── WeatherCard.jsx      ← affiche les données météo
+    ├── WeatherCard.css
+    ├── Loader.jsx           ← spinner de chargement
+    └── Loader.css
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Comment ça marche (le flow)
 
-## React Compiler
+```
+Utilisateur tape "Paris"
+        ↓
+SearchBar appelle onSearch("Paris")
+        ↓
+App.jsx appelle fetchWeather("Paris")
+        ↓
+fetch("https://api.openweathermap.org/...?q=Paris&appid=TACLÉ")
+        ↓
+OpenWeatherMap répond avec un JSON
+        ↓
+setWeather(data) → React redessine
+        ↓
+WeatherCard reçoit weather en prop et affiche
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Installation
 
-## Expanding the ESLint configuration
+```bash
+# 1. Installer les dépendances
+npm install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# 2. Créer le fichier .env
+cp .env.example .env
+# Colle ta clé API dedans
+
+# 3. Lancer
+npm run dev
+```
+
+## Hooks utilisés
+
+- `useState` → stocker ville, données météo, loading, erreur
+- `useEffect` → charger Londres automatiquement au démarrage
+- `useRef` → accéder à l'input directement (focus)
+
+## Concepts React démontrés
+
+- Props : App passe les données aux composants enfants
+- Affichage conditionnel : `{loading && <Loader />}`
+- Async/await : pour attendre la réponse de l'API
+- fetch() : appel HTTP natif du navigateur

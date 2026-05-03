@@ -1,0 +1,133 @@
+.weather-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.city-name {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text);
+}
+
+.condition-text {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 5px;
+  text-transform: capitalize;
+}
+
+.weather-icon {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
+}
+
+/* Temperature */
+.temp-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.temp-value {
+  font-family: var(--font-display);
+  font-size: 6rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -3px;
+}
+
+.temp-unit {
+  font-size: 2.2rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 10px;
+}
+
+.temp-feels {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Sun row */
+.sun-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px dashed var(--border);
+  padding-top: 1.25rem;
+}
+
+.sun-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sun-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sun-time {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.sun-divider {
+  width: 1px;
+  height: 30px;
+  background: var(--border);
+  flex-shrink: 0;
+}

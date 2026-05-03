@@ -1,121 +1,119 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+// ============================================================
+// App.jsx — le cerveau de l'application
+//
+// NOUVEAUTÉ : on appelle maintenant 2 endpoints API en parallèle
+//   1. /weather   → météo actuelle (température, humidité...)
+//   2. /forecast  → prévisions toutes les 3h sur 5 jours
+//      → on prend juste les 8 premières entrées = 24h
+//      → utilisées pour le graphique à droite
+//
+// Promise.all([fetch1, fetch2]) → les 2 requêtes partent
+// en même temps, on attend que les 2 soient finies.
+// ============================================================
+
+import { useState, useEffect } from 'react'
+import SearchBar    from './components/SearchBar'
+import WeatherCard  from './components/WeatherCard'
+import ForecastChart from './components/ForecastChart'
+import Loader       from './components/Loader'
 import './App.css'
 
+const API_KEY  = import.meta.env.VITE_WEATHER_API_KEY || ''
+const BASE_URL = 'https://api.openweathermap.org/data/2.5'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [city, setCity]         = useState('London')
+  const [weather, setWeather]   = useState(null)   // /weather response
+  const [forecast, setForecast] = useState(null)   // /forecast response
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
+
+  // ── fetchWeather ─────────────────────────────────────────
+  // Appelle les 2 endpoints en parallèle avec Promise.all
+  const fetchWeather = async (cityName) => {
+    setLoading(true)
+    setError('')
+    setWeather(null)
+    setForecast(null)
+
+    // On construit les 2 URLs
+    const weatherUrl  = `${BASE_URL}/weather?q=${cityName}&appid=${API_KEY}&units=metric`
+    const forecastUrl = `${BASE_URL}/forecast?q=${cityName}&appid=${API_KEY}&units=metric&cnt=8`
+    //                                                                                    ^^^^
+    //   cnt=8 → on demande seulement 8 entrées (3h × 8 = 24h)
+    //   chaque entrée = snapshot météo à un moment donné
+
+    try {
+      // Promise.all lance les 2 fetch EN MÊME TEMPS
+      // et attend que les DEUX soient finis avant de continuer
+      const [weatherRes, forecastRes] = await Promise.all([
+        fetch(weatherUrl),
+        fetch(forecastUrl)
+      ])
+
+      if (!weatherRes.ok) {
+        if (weatherRes.status === 401) throw new Error('Clé API invalide — vérifie ton .env')
+        if (weatherRes.status === 404) throw new Error(`Ville "${cityName}" introuvable`)
+        throw new Error('Erreur serveur')
+      }
+
+      // On convertit les 2 réponses en JSON
+      const weatherData  = await weatherRes.json()
+      const forecastData = await forecastRes.json()
+
+      setWeather(weatherData)
+      setForecast(forecastData)   // forecastData.list = tableau de 8 snapshots
+
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchWeather(city)
+  }, [])
+
+  const handleSearch = (newCity) => {
+    setCity(newCity)
+    fetchWeather(newCity)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app">
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <header className="app-header">
+        <div className="logo">
+          <span className="logo-dot" />
+          <h1 className="app-title">Skycast</h1>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <SearchBar onSearch={handleSearch} />
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <main className="app-main">
+        {loading && <Loader />}
+
+        {error && !loading && (
+          <div className="error-box">
+            <span>⚠️</span>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {weather && forecast && !loading && !error && (
+          <div className="dashboard">
+            {/* Colonne gauche : météo actuelle */}
+            <WeatherCard weather={weather} />
+
+            {/* Colonne droite : graphique 24h */}
+            {/* forecast.list = les 8 snapshots toutes les 3h */}
+            <ForecastChart forecastList={forecast.list} />
+          </div>
+        )}
+      </main>
+
+    </div>
   )
 }
 
