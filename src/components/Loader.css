@@ -23,3 +23,18 @@
   color: var(--muted);
   font-weight: 300;
 }
+
+@media (max-width: 640px) {
+  .loader {
+    gap: 10px;
+    padding: 2rem 1.5rem;
+  }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2.5px solid rgba(168, 85, 247, 0.2);
+  }
+  .loader-text {
+    font-size: 12px;
+  }
+}
