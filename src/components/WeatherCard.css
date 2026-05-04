@@ -35,7 +35,6 @@
   filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
 }
 
-/* Temperature */
 .temp-main {
   display: flex;
   align-items: flex-start;
@@ -65,7 +64,6 @@
   margin-bottom: 1.75rem;
 }
 
-/* Stats grid */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -53,32 +53,22 @@ import {
   CartesianGrid, Tooltip,
   ResponsiveContainer
 } from 'recharts'
+
 import './ForecastChart.css'
 
 function ForecastChart({ forecastList }) {
 
-  // ── TRANSFORMATION DES DONNÉES ──────────────────────────
-  // forecastList est le tableau brut de l'API.
-  // .map() parcourt chaque entrée et retourne un nouvel objet
-  // au format que Recharts comprend.
   const chartData = forecastList.map((entry) => {
-
-    // entry.dt_txt = "2024-01-01 15:00:00"
-    // On split par " " → ["2024-01-01", "15:00:00"]
-    // On prend [1] → "15:00:00"
-    // On split par ":" → ["15", "00", "00"]
-    // On prend [0] → "15" (l'heure seulement)
     const hour = entry.dt_txt.split(' ')[1].split(':')[0]
 
     return {
-      time:     `${hour}h`,                       // ex: "15h"
-      temp:     Math.round(entry.main.temp),       // ex: 14
-      humidity: entry.main.humidity,               // ex: 72
-      feels:    Math.round(entry.main.feels_like), // ex: 13
-    }
+      time:     `${hour}h`,                       
+      temp:     Math.round(entry.main.temp),       
+      humidity: entry.main.humidity,               
+      feels:    Math.round(entry.main.feels_like), 
+      }
   })
 
-  // Tooltip personnalisé qui s'affiche quand on survole le graphique
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null
     return (
@@ -93,14 +83,12 @@ function ForecastChart({ forecastList }) {
   return (
     <div className="chart-card">
 
-      <h2 className="chart-title">Prévisions 24h</h2>
-      <p className="chart-subtitle">Température & humidité toutes les 3h</p>
+      <h2 className="chart-title">Today's Weather</h2>
+      <p className="chart-subtitle">Each 3h</p>
 
-      {/* ResponsiveContainer prend toute la largeur disponible */}
       <ResponsiveContainer width="100%" height={220}>
         <AreaChart data={chartData} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
 
-          {/* Dégradés pour remplir les zones sous les courbes */}
           <defs>
             <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%"  stopColor="#a855f7" stopOpacity={0.4} />
@@ -112,10 +100,8 @@ function ForecastChart({ forecastList }) {
             </linearGradient>
           </defs>
 
-          {/* Grille de fond */}
           <CartesianGrid stroke="rgba(160,120,255,0.08)" vertical={false} />
 
-          {/* Axe horizontal : les heures */}
           <XAxis
             dataKey="time"
             tick={{ fill: '#9b87c0', fontSize: 12, fontFamily: 'Jost' }}
@@ -123,7 +109,6 @@ function ForecastChart({ forecastList }) {
             tickLine={false}
           />
 
-          {/* Axe vertical : les températures */}
           <YAxis
             tick={{ fill: '#9b87c0', fontSize: 12, fontFamily: 'Jost' }}
             axisLine={false}
@@ -133,7 +118,7 @@ function ForecastChart({ forecastList }) {
 
           <Tooltip content={<CustomTooltip />} />
 
-          {/* Courbe température — dataKey="temp" lit entry.temp du chartData */}
+          {/* Courbe température */}
           <Area
             type="monotone"
             dataKey="temp"
@@ -163,7 +148,7 @@ function ForecastChart({ forecastList }) {
       <div className="chart-legend">
         <span className="legend-item">
           <span className="legend-line purple" />
-          Température
+          Température °C
         </span>
         <span className="legend-item">
           <span className="legend-line indigo dashed" />

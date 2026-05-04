@@ -1,8 +1,6 @@
 import { useState, useRef } from 'react'
 import './SearchBar.css'
 
-//   onSearch → fonction définie dans App.jsx, appelée avec la ville
-
 
 function SearchBar({ onSearch }) {
 
