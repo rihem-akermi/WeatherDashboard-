@@ -7,7 +7,6 @@
   min-height: 480px;
 }
 
-/* Header */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -98,7 +97,6 @@
   color: var(--text);
 }
 
-/* Sun row */
 .sun-row {
   display: flex;
   align-items: center;

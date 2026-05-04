@@ -26,12 +26,11 @@
   flex-shrink: 0;
 }
 
-.logo-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--accent-bright);
-}
+.logo-ice {
+  width: 30px;
+  height: 30px;
+  font-size: 25px;
+  }
 
 .app-title {
   font-family: var(--font-display);
@@ -42,7 +41,6 @@
   white-space: nowrap;
 }
 
-/* ── Main ────────────────────────────────── */
 .app-main {
   flex: 1;
   padding: 1.75rem 1.5rem 2rem;

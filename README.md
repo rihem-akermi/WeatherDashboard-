@@ -35,20 +35,6 @@ setWeather(data) → React redessine
 WeatherCard reçoit weather en prop et affiche
 ```
 
-## Installation
-
-```bash
-# 1. Installer les dépendances
-npm install
-
-# 2. Créer le fichier .env
-cp .env.example .env
-# Colle ta clé API dedans
-
-# 3. Lancer
-npm run dev
-```
-
 ## Hooks utilisés
 
 - `useState` → stocker ville, données météo, loading, erreur
